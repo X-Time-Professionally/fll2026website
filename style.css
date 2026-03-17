@@ -434,3 +434,20 @@ min-height:100vh;
 .comp-page{
 flex:1;
 }
+
+.comp-header {
+    text-align: center;
+}
+
+.logo.sumobot {
+    display: flex;
+    justify-content: center; /* centrează pe orizontală */
+    align-items: center;     /* aliniază pe verticală */
+    gap: 15px;               /* spațiu între text și poză */
+}
+
+.logo.sumobot img {
+    width: 60px; /* sau cât vrei tu */
+    height: auto;
+}
+

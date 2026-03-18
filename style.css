@@ -129,9 +129,10 @@ body {
   display: none;
   background: none;
   border: none;
-  color: #000;
-  font-size: 28px;
+  color: #ffffff; /* Contrast on dark header */
+  font-size: 32px;
   cursor: pointer;
+  transition: transform 0.3s ease;
 }
 
 /* ========== HERO (PRIMUL SLIDE) ========== */
@@ -377,53 +378,116 @@ body {
 @media (max-width: 768px) {
 
   .header {
-    padding: 12px 20px;
+    padding: 15px 20px;
   }
 
   .nav {
-    display: none;
+    display: flex;
+    flex-direction: column;
     position: absolute;
-    top: 74px;
+    top: 100%;
     left: 0;
     width: 100%;
-    background: #16213e;
-    flex-direction: column;
-    align-items: center;
+    background: rgba(26, 26, 46, 0.98);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
 
   .nav.open {
-    display: flex;
+    max-height: 450px;
+    opacity: 1;
+    padding-bottom: 10px;
   }
 
   .nav-link {
-    padding: 14px 0;
+    padding: 16px 0;
     width: 100%;
     text-align: center;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* very subtle separation */
+    font-size: 18px;
+  }
+
+  .dropdown-menu {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    box-shadow: none;
+    background: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    border-radius: 0;
+    border: none;
+    margin-top: 0;
   }
 
   .menu-btn {
     display: block;
   }
+  
+  /* ACASA FIX */
+  .hero {
+    height: 70vh;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   .hero-content h1 {
-    font-size: 32px;
+    font-size: 38px;
+    line-height: 1.2;
+    margin-bottom: 15px;
   }
 
   .hero-content p {
-    font-size: 16px;
+    font-size: 18px;
+    line-height: 1.5;
   }
 
   .section {
-    padding: 40px 20px;
+    padding: 50px 20px;
   }
 
   .section-title {
-    font-size: 26px;
+    font-size: 28px;
+    margin-bottom: 30px;
   }
 
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* CONTACTE FIX */
+  .contacts-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .contact-item {
+    background: #f4f6f9;
+    width: 100%;
+    max-width: 350px;
+    padding: 25px 20px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    border: 1px solid #eaeaea;
+  }
+
+  .contact-icon {
+    font-size: 38px;
+    margin-bottom: 15px;
+  }
+
+  .contact-item p {
+    font-size: 18px;
+    font-weight: 500;
   }
 }
 .page{

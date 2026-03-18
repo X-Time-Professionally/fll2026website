@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLL 2026 – Echipa X-Time</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Colors */
+            --bg-main: #060913;
+            --bg-card: rgba(15, 23, 42, 0.4);
+            --bg-card-hover: rgba(15, 23, 42, 0.8);
+
+            --primary-blue: #1E3A8A;
+            --light-blue: #3B82F6;
+            --glow-blue: rgba(59, 130, 246, 0.5);
+
+            --accent-gold: #D4AF37;
+            --light-gold: #FCE68A;
+            --glow-gold: rgba(212, 175, 55, 0.5);
+
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Utility Classes */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 6rem 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            position: relative;
+            letter-spacing: -1px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--light-blue), var(--accent-gold));
+            margin: 1rem auto 4rem;
+            border-radius: 2px;
+            box-shadow: 0 0 10px var(--glow-blue);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .gold {
+            color: var(--accent-gold);
+        }
+
+        .blue {
+            color: var(--light-blue);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--light-blue));
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--glow-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 8px 30px var(--glow-blue);
+            background: linear-gradient(135deg, var(--light-blue), #60A5FA);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #B8860B, var(--accent-gold));
+            box-shadow: 0 4px 15px var(--glow-gold);
+            color: #000;
+        }
+
+        .btn-gold:hover {
+            box-shadow: 0 8px 30px var(--glow-gold);
+            background: linear-gradient(135deg, var(--accent-gold), var(--light-gold));
+            color: #000;
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 2.5rem;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(212, 175, 55, 0.1);
+            background: var(--bg-card-hover);
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--accent-gold);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.1);
+        }
+
+        .badge-blue {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--light-blue);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.1);
+        }
+
+        .badges-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ------------------ SECTIONS ------------------ */
+
+        /* 1. Hero Section */
+        #hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('../poze/fundalul fll2026.png') center/cover no-repeat;
+            opacity: 0.4;
+            transform: scale(1.05);
+            animation: slowZoom 20s infinite alternate linear;
+            z-index: 1;
+        }
+
+        @keyframes slowZoom {
+            from {
+                transform: scale(1.05);
+            }
+
+            to {
+                transform: scale(1.15);
+            }
+        }
+
+        #hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            background: linear-gradient(to top, var(--bg-main) 10%, transparent);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+            max-width: 900px;
+            padding: 0 2rem;
+            animation: fadeUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, #fff 30%, var(--text-muted));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+            color: var(--accent-gold);
+            margin-bottom: 3rem;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        img.rounded-img {
+            width: 100%;
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        img.rounded-img:hover {
+            transform: scale(1.02);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        /* Icon Lists */
+        .icon-list {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+
+        .icon-list li {
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: flex-start;
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        .icon-list li strong {
+            color: var(--text-main);
+            margin-right: 5px;
+        }
+
+        .icon-list i {
+            color: var(--light-blue);
+            margin-right: 1rem;
+            margin-top: 5px;
+            font-size: 1.2rem;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Icon Cards */
+        .icon-card {
+            text-align: center;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .icon-card i {
+            font-size: 3.5rem;
+            background: linear-gradient(135deg, var(--accent-gold), #B8860B);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 10px 15px rgba(212, 175, 55, 0.3));
+        }
+
+        .icon-card.blue-icon i {
+            background: linear-gradient(135deg, var(--light-blue), var(--primary-blue));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 15px rgba(59, 130, 246, 0.3));
+        }
+
+        .icon-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--light-blue), var(--accent-gold));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.5;
+        }
+
+        .time-box {
+            padding: 10px 50px;
+            position: relative;
+            width: 50%;
+            margin-bottom: 3rem;
+        }
+
+        .time-box.left {
+            left: 0;
+            text-align: right;
+        }
+
+        .time-box.right {
+            left: 50%;
+        }
+
+        .time-box::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-main);
+            border: 4px solid var(--accent-gold);
+            border-radius: 50%;
+            top: 30px;
+            z-index: 1;
+            box-shadow: 0 0 15px var(--glow-gold);
+            transition: all 0.3s ease;
+        }
+
+        .time-box:hover::after {
+            background: var(--accent-gold);
+            transform: scale(1.2);
+        }
+
+        .time-box.left::after {
+            right: -10px;
+        }
+
+        .time-box.right::after {
+            left: -10px;
+        }
+
+        .time-date {
+            color: var(--light-blue);
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Stats */
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Sponsori */
+        .sponsors-grid {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .sponsor-logo {
+            font-size: 2.5rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .sponsor-logo:hover {
+            color: var(--text-main);
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* QR Code */
+        .qr-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .qr-box i {
+            font-size: 150px;
+            color: #000;
+        }
+
+        /* Modal Gallery */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-main);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            overflow: hidden;
+            /* Removing scroll */
+        }
+
+        .modal.show {
+            opacity: 1;
+        }
+
+        .modal-content {
+            position: absolute;
+            /* Using absolute positioning for perfect center */
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Center perfectly */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+            max-height: 100vh;
+            max-width: 1400px;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            animation: swipeAnim 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes swipeAnim {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateX(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateX(0);
+            }
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            max-width: 100%;
+            height: auto;
+            max-height: 85vh;
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            object-fit: contain;
+        }
+
+        .slide-text {
+            margin-top: 1.5rem;
+            font-size: 1.25rem;
+            color: var(--text-main);
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 2rem;
+            border-radius: 16px;
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 95%;
+        }
+
+        .modal-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(15, 23, 42, 0.8);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            z-index: 1010;
+        }
+
+        .modal-nav:hover {
+            background: var(--light-blue);
+            box-shadow: 0 0 20px var(--glow-blue);
+            transform: translateY(-50%) scale(1.1);
+            border-color: transparent;
+        }
+
+        .prev {
+            left: 20px;
+        }
+
+        .next {
+            right: 20px;
+        }
+
+        .close-modal {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            color: var(--text-muted);
+            font-size: 2.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 1010;
+            background: rgba(15, 23, 42, 0.8);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            backdrop-filter: blur(5px);
+        }
+
+        .close-modal:hover {
+            color: var(--accent-gold);
+            transform: rotate(90deg);
+            background: rgba(15, 23, 42, 1);
+        }
+
+        .gallery-indicator {
+            margin-top: 1.5rem;
+            color: var(--text-muted);
+            font-size: 1rem;
+            letter-spacing: 2px;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        /* Responsive */
+        @media screen and (max-width: 992px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline::after {
+                left: 40px;
+            }
+
+            .time-box {
+                width: 100%;
+                padding-left: 90px;
+                padding-right: 20px;
+                text-align: left !important;
+            }
+
+            .time-box.right {
+                left: 0;
+            }
+
+            .time-box.left::after,
+            .time-box.right::after {
+                left: 30px;
+            }
+
+            .slide img {
+                max-height: 70vh;
+            }
+
+            .slide-text {
+                font-size: 1rem;
+                padding: 0.8rem 1rem;
+                margin-top: 1rem;
+            }
+
+            .modal-nav {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+            }
+
+            .prev {
+                left: 10px;
+            }
+
+            .next {
+                right: 10px;
+            }
+
+            .close-modal {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+                font-size: 2rem;
+            }
+
+            .container {
+                padding: 4rem 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 3rem;
+            }
+        }
+
+        /* Problem Modal Specific Styles */
+        #problem-modal {
+            overflow-y: auto;
+            align-items: flex-start;
+        }
+
+        .problem-modal-content {
+            background: var(--bg-card-hover);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            margin: 40px auto;
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .problem-close-btn {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .problem-close-btn:hover {
+            color: #EF4444;
+            background: #060913;
+            border-color: #EF4444;
+            transform: scale(1.1) rotate(90deg);
+        }
+
+        .modal.show .problem-modal-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .problem-modal-content img {
+            width: 100%;
+            height: auto;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .problem-modal-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .problem-modal-content p {
+            color: var(--text-muted);
+            font-size: 1.15rem;
+            line-height: 1.7;
+        }
+
+        .problem-card {
+            cursor: pointer;
+            position: relative;
+        }
+
+        .problem-card::after {
+            content: 'Click pentru detalii';
+            position: absolute;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            color: var(--light-blue);
+            opacity: 0;
+            transition: opacity 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .problem-card:hover::after {
+            opacity: 1;
+        }
+
+        .problem-card:hover {
+            border-color: var(--light-blue);
+        }
+
+        .problem-card p {
+            margin-bottom: 1.5rem;
+            /* space for the hover text */
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            padding: 4rem 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .gallery-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(59, 130, 246, 0.4);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(59, 130, 246, 0.15);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 250px;
+            overflow: hidden;
+        }
+
+        .gallery-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .gallery-card:hover .gallery-img img {
+            transform: scale(1.1);
+        }
+
+        .gallery-desc {
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(6, 9, 19, 0.5);
+        }
+
+        .subtitle-glow {
+            display: inline-block;
+            margin-top: -2.5rem;
+            margin-bottom: 3.5rem;
+            padding: 0.6rem 2rem;
+            border-radius: 30px;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--light-blue);
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            font-weight: 500;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+            transition: all 0.3s;
+        }
+
+        .subtitle-glow:hover {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+            color: var(--accent-gold);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 1. HERO SECTION -->
+    <section id="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1 class="hero-title">FLL 2026 <br><span class="gold">Echipa X-Time</span></h1>
+            <p class="hero-subtitle">Finaliști la competiția First Lego League</p>
+            <a href="#proiect" class="btn btn-gold">
+                <span>Vezi Proiectul Nostru</span>
+                <i class="fa-solid fa-arrow-down"></i>
+            </a>
+            <section class="container reveal text-center" style="padding: 4rem 0;"></section>
+            <a href="../index.html" class="btn btn-gold" style="font-size: 1.2rem; padding: 1.2rem 3rem;">Mergi Acasa
+            </a>
+        </div>
+    </section>
+
+    <!-- 2. DESPRE PARTICIPARE -->
+    <section id="proiect" class="container reveal">
+        <div class="grid-2">
+            <div>
+                <div class="badge"><i class="fa-solid fa-trophy"></i> Finalist FLL 2026</div>
+                <h2 class="section-title" style="text-align: left; margin-bottom: 2rem;">Despre Participare</h2>
+                <p style="font-size: 1.2rem; margin-bottom: 1.5rem; color: var(--text-muted);">
+                    În 2026, am participat la cel mai mare concurs de robotică educațională, <strong>FIRST LEGO League
+                        (FLL)</strong>, și am ajuns în finală datorită inovației și determinării noastre.
+                </p>
+                <p style="font-size: 1.1rem; color: var(--text-muted);">
+                    A fost o călătorie extraordinară în care am învățat să lucrăm ca o adevărată echipă, să rezolvăm
+                    probleme complexe și să îmbinăm pasiunea pentru tehnologie cu descoperirea istoriei.
+                </p>
+            </div>
+            <div>
+                <img src="../poze/poza toata echipa.jpg" alt="Echipa X-Time la FLL" class="rounded-img">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. ROBOTUL NOSTRU -->
+    <section class="container reveal">
+        <h2 class="section-title">Robotul Nostru</h2>
+        <div class="grid-2">
+            <div>
+                <img src="../poze/poza cu robot.jpg" alt="Robotul X-Time FLL" class="rounded-img">
+            </div>
+            <div>
+                <div class="glass-card" style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--accent-gold);">
+                        <i class="fa-solid fa-gears" style="margin-right: 10px;"></i> Structura Robotului
+                    </h3>
+                    <ul class="icon-list">
+                        <li><i class="fa-solid fa-bolt"></i>
+                            <div><strong>Motoare:</strong> 2 x Motoare Mari pentru deplasare precisă, 2 x Motoare Mediu
+                                pentru mișcarea atașamentelor</div>
+                        </li>
+                        <li><i class="fa-solid fa-eye"></i>
+                            <div><strong>Senzori:</strong> Pentru minimizarea erorilor am folosit senzorul
+                                Giroscop (rotiri perfecte).</div>
+                        </li>
+                        <li><i class="fa-solid fa-microchip"></i>
+                            <div><strong>Controler:</strong> Hub-ul inteligent LEGO SPIKE Prime.</div>
+                        </li>
+                        <li><i class="fa-solid fa-battery-full"></i>
+                            <div><strong>Baterie:</strong> Litiu-Ion reîncărcabilă, optimizată pentru runde lungi.</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="glass-card">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: var(--light-blue);">
+                        <i class="fa-solid fa-laptop-code" style="margin-right: 10px;"></i> Programare
+                    </h3>
+                    <ul class="icon-list">
+                        <li><i class="fa-brands fa-python"></i>
+                            <div><strong>Limbaj folosit:</strong> Block Coding.</div>
+                        </li>
+                        <li><i class="fa-solid fa-code-branch"></i>
+                            <div><strong>Cum funcționează:</strong> Algoritmi avansați PID pentu deplasarea înainte și
+                                rotirile perfecte</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. TEMATICA – ARHEOLOGIE -->
+    <section
+        style="background: linear-gradient(rgba(6, 9, 19, 0.9), rgba(6, 9, 19, 0.9)), url('file:///C:/Users/User/.gemini/antigravity/brain/2f5214b4-ea16-49a5-9cde-16acc9e84b96/archaeology_artifact_1773775738864.png') center/cover; padding: 6rem 0; border-top: 1px solid rgba(212, 175, 55, 0.2); border-bottom: 1px solid rgba(212, 175, 55, 0.2);">
+        <div class="container reveal">
+            <div class="text-center" style="max-width: 800px; margin: 0 auto;">
+                <h2 class="section-title">Proiectul Inovator: <span class="gold">Arheologie & Tech</span></h2>
+                <p style="font-size: 1.25rem; color: #E2E8F0; margin-bottom: 2rem;">
+                    Tema FLL 2026 ne-a provocat să privim spre tehnologie pentru a proteja și descoperi trecutul. Echipa
+                    noastră a explorat modul în care robotica poate asista arheologii în escavări sigure, păstrând
+                    istoria intactă cu ajutorul senzorilor.
+                </p>
+                <div class="badge"><i class="fa-solid fa-compass"></i> Explorare</div>
+                <div class="badge"><i class="fa-solid fa-monument"></i> Arheologie</div>
+                <div class="badge"><i class="fa-solid fa-satellite-dish"></i> Scanare 3D</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PROBLEMA & SOLUȚIA -->
+    <section class="container reveal">
+        <div class="grid-2">
+            <!-- Problema -->
+            <div class="glass-card icon-card">
+                <i class="fa-solid fa-circle-exclamation text-center"></i>
+                <h3 class="gold">Problema Identificată</h3>
+                <p style="color: var(--text-muted); text-align: center;">
+                    Identificarea factorilor critici care duc la pierderea
+                    (distrugerea) materială a exponatelor în timpul tranziției de la mediul subteran la cel de
+                    suprafață.
+                </p>
+            </div>
+
+            <!-- Soluția -->
+            <div class="glass-card icon-card blue-icon"
+                style="transform: scale(1.05); border-color: rgba(59, 130, 246, 0.3);">
+                <i class="fa-solid fa-lightbulb text-center"></i>
+                <h3 class="blue">Soluția Noastră 🔥</h3>
+                <p style="color: var(--text-muted); text-align: center; margin-bottom: 1.5rem;">
+                    Extragerea sigură a obiectelor
+                    Vom utiliza un robot LEGO echipat cu doi senzori de culoare, patru motoare și un senzor giroscopic
+                    pentru a scoate obiectele din
+                    pământ fără a le deteriora. Senzorii ajută la poziționarea precisă, motoarele controlează deplasarea
+                    și atașamentele delicate,
+                    iar senzorul giroscopic asigură mișcări și rotații exacte, astfel încât fiecare obiect să fie
+                    manipulat în siguranță.
+                </p>
+                <div class="badge badge-blue">Inovație</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="container reveal">
+        <h2 class="section-title">Evoluția Echipei <span class="blue">X-Time</span></h2>
+        <div class="timeline">
+            <div class="time-box left glass-card" style="padding: 2rem;">
+                <div class="time-date">Octombrie 2025</div>
+                <h3 style="margin-bottom: 10px;">Începutul Proiectului</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Am format echipa, am studiat tema și am
+                    dezbătut zeci de idei. Am construit primul machet simplu.</p>
+            </div>
+
+            <div class="time-box right glass-card" style="padding: 2rem;">
+                <div class="time-date">Noiembrie 2025</div>
+                <h3 style="margin-bottom: 10px;">Primele Teste</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Am întâmpinat dificultăți. Robotul derapa și
+                    senzorii dădeau erori. Ne-am refăcut codul de la zero folosind blocurile create de noi. </p>
+            </div>
+
+            <div class="time-box left glass-card" style="padding: 2rem;">
+                <div class="time-date">Ianuarie 2026</div>
+                <h3 style="margin-bottom: 10px;">Optimizare & Depășirea Problemelor</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Motoarele sincronizate la milimetru. Soluția
+                    proiectului finalizată. Sute de runde de teste pe planșa oficială.</p>
+            </div>
+
+            <div class="time-box right glass-card" style="padding: 2rem; border-color: var(--accent-gold);">
+                <div class="time-date gold">Martie 2025</div>
+                <h3 style="margin-bottom: 10px; color: var(--accent-gold);">Competiția & Finala🏆</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Ziua competiției! Echipa a strălucit, robotul a
+                    funcționat perfect, rezultând calificarea în marea finală!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTE & REZULTATE -->
+    <section class="container reveal">
+        <h2 class="section-title">Teste & Rezultate</h2>
+        <div class="grid-3">
+            <div class="glass-card text-center text-center">
+                <div class="stat-number">1000+</div>
+                <h3 style="color: var(--text-muted);">Teste Rulate</h3>
+            </div>
+            <div class="glass-card text-center text-center">
+                <div class="stat-number blue">94%</div>
+                <h3 style="color: var(--text-muted);">Precizie Senzori</h3>
+            </div>
+            <div class="glass-card text-center text-center">
+                <div class="stat-number">0.2s</div>
+                <h3 style="color: var(--text-muted);">Viteză Reacție</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERIE -->
+    <section id="gallery" class="container reveal gallery-section">
+        <h2 class="section-title">Galerie</h2>
+        <div class="gallery-grid">
+            <div class="gallery-card">
+                <div class="gallery-img"><img src="gallery.png" alt="Foto 1"
+                        onerror="this.src='../poze/poze echipa 1.jpg'"></div>
+                <p class="gallery-desc"> Instituția Publică Gimnaziul "Viorel Cantemir"</p>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-img"><img src="gallery.png" alt="Foto 2"
+                        onerror="this.src='../poze/poze echipa 2.jpg'"></div>
+                <p class="gallery-desc">Toată Echipa la Semifinală </p>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-img"><img src="gallery.png" alt="Foto 3"
+                        onerror="this.src='../poze/Screenshot 2026-03-18 192037.png'"></div>
+                <p class="gallery-desc">Conferința științifică cu Academia de Științe a Moldovei</p>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-img"><img src="gallery.png" alt="Foto 4" onerror="this.src=''"></div>
+                <p class="gallery-desc">Construirea robotului cu echipa noastră</p>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-img"><img src="gallery.png" alt="Foto 5" onerror="this.src=''"></div>
+                <p class="gallery-desc">Testarea robotului pe terenul de competiție.</p>
+            </div>
+            <div class="gallery-card">
+                <div class="gallery-img"><img src="gallery.png" alt="Foto 6"
+                        onerror="this.src='../poze/poza toata echipa.jpg'"></div>
+                <p class="gallery-desc">Poza de grup la campionatul național.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEME ÎNTÂLNITE -->
+    <section class="container reveal">
+        <div class="text-center">
+            <h2 class="section-title" style="margin-bottom: 3.5rem;">Probleme Întâlnite</h2>
+            <div class="subtitle-glow"><i class="fa-solid fa-lightbulb"
+                    style="color: var(--accent-gold); margin-right: 8px;"></i> ...și cum le-am rezolvat</div>
+        </div>
+        <div class="grid-3" style="margin-top: 1rem;">
+            <div class="glass-card problem-card" onclick="openProblemModal('mecanice')">
+                <div style="font-size: 2rem; color: #EF4444; margin-bottom: 1rem;"><i class="fa-solid fa-wrench"></i>
+                </div>
+                <h3 style="margin-bottom: 10px;">Mecanice</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Roțile patinau pe suprafața netedă a panșei. Am
+                    schimbat anvelopele cu un cauciuc mai moale.</p>
+            </div>
+            <div class="glass-card problem-card" onclick="openProblemModal('cod')">
+                <div style="font-size: 2rem; color: #3B82F6; margin-bottom: 1rem;"><i class="fa-solid fa-bug"></i></div>
+                <h3 style="margin-bottom: 10px;">De Cod</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">La viraje rapide, programul ignora comanda
+                    senzorului. Soluția: algoritm Proporțional (P).</p>
+            </div>
+            <div class="glass-card problem-card" onclick="openProblemModal('senzori')">
+                <div style="font-size: 2rem; color: #F59E0B; margin-bottom: 1rem;"><i
+                        class="fa-solid fa-satellite-dish"></i></div>
+                <h3 style="margin-bottom: 10px;">Senzori</h3>
+                <p style="color: var(--text-muted); font-size: 0.95rem;">Senzorul giroscopic din LEGO SPIKE Prime indică
+                    valori greșite de unghi (derivă în timp), chiar și atunci când robotul nu se mișcă.</p>
+            </div>
+        </div>
+
+        <!-- Problem Modal -->
+        <div id="problem-modal" class="modal">
+            <span class="close-modal" onclick="closeProblemModal()"><i class="fa-solid fa-xmark"></i></span>
+            <div class="modal-content" style="padding: 2rem 1rem;">
+
+                <div class="problem-modal-content" id="problem-content-mecanice" style="display: none;">
+                    <img src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="Mecanica">
+                    <h3><i class="fa-solid fa-wrench" style="color: #EF4444;"></i> Probleme Mecanice</h3>
+                    <p>În timpul primelor runde de teste pe planșa oficială FLL, am observat o eroare repetitivă: roțile
+                        robotului patinau pe suprafața lucioasă a planșei. Acest lucru făcea ca distanța calculată
+                        din rotațiile motoarelor să fie incorectă.</p>
+                    <br>
+                    <p><strong style="color: var(--light-blue);"><i class="fa-solid fa-lightbulb"></i> Soluția
+                            (Inovația):</strong> Am regândit distribuția greutății. Am înlocuit anvelopele folosind
+                        anvelope din lego mindstorms ev3 standard
+                        cu un coeficient de frecare mai mare (cauciuc moale) și am mutat centrul de greutate al
+                        robotului exact pe axa punții motoare. tracțiunea a crescut cu 40%!</p>
+                </div>
+
+                <div class="problem-modal-content" id="problem-content-cod" style="display: none;">
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                        alt="Cod">
+                    <h3><i class="fa-solid fa-bug" style="color: #3B82F6;"></i> Probleme de Cod</h3>
+                    <p>Robotul se mișca prea sacadat la ieșirile din viraje. Când detecta o schimbare bruscă a liniei
+                        negre pe care o urmărea, reacția standard a buclei noastre de control era prea lentă, cauzând
+                        derapaje și ratarea intersecțiilor.</p>
+                    <br>
+                    <p><strong style="color: var(--light-blue);"><i class="fa-solid fa-lightbulb"></i> Soluția
+                            (Inovația):</strong> Am trecut de la o deplasare simplă (IF/ELSE) la implementarea unui
+                        algoritm matematic avansat <strong>PID (Proporțional-Integral-Derivativ)</strong>, dar axat doar
+                        pe o variabilă Proporțională calibrată fin. Robotul acum "înțelege" eroarea de unghi și
+                        corectează lin ieșirile de pe trasă, maximizând viteza.</p>
+                </div>
+
+                <div class="problem-modal-content" id="problem-content-senzori" style="display: none;">
+                    <img src="../poze/lego-technic-hub-mare-pentru-spike-prime.jpg" alt="Senzori">
+                    <h3><i class="fa-solid fa-satellite-dish" style="color: #F59E0B;"></i> Probleme Senzori</h3>
+                    <p>Senzorul giroscopic din LEGO SPIKE Prime indică valori greșite de unghi (derivă în timp), chiar
+                        și atunci când robotul nu se mișcă.</p>
+                    <br>
+                    <p><strong style="color: var(--light-blue);"><i class="fa-solid fa-lightbulb"></i> Soluția
+                            Recalibrarea senzorului prin resetarea valorii la 0 și menținerea robotului complet nemișcat
+                            câteva secunde la pornire.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REZULTATE & PREMII -->
+    <section class="container reveal text-center">
+        <h2 class="section-title">Rezultate & Premii</h2>
+        <div class="badges-container" style="padding: 2rem 0;">
+            <div class="badge"
+                style="font-size: 1.5rem; padding: 1rem 2rem; border-color: #CD7F32; color: #CD7F32; filter: drop-shadow(0 0 15px rgba(205, 127, 50, 0.3));">
+                <i class="fa-solid fa-medal"></i> Locul 3 Sumobot
+            </div>
+            <div class="badge"
+                style="font-size: 1.5rem; padding: 1rem 2rem; border-color: var(--accent-gold); color: var(--accent-gold); filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));">
+                <i class="fa-solid fa-star"></i> Finaliști FLL 2025
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERIE INTERACTIVĂ (WOW FACTOR) -->
+    <section class="container reveal text-center" style="padding: 4rem 0;">
+        <h2 class="section-title">Atinge Experiența</h2>
+        <p style="color: var(--text-muted); font-size: 1.2rem; margin-bottom: 3rem;">Descoperă povestea vizuală, efortul
+            și bucuria Echipei X-Time.</p>
+
+        <button onclick="openModal()" class="btn btn-gold" style="font-size: 1.2rem; padding: 1.2rem 3rem;">
+            <i class="fa-solid fa-images"></i> Vezi Imagini din Proiect
+        </button>
+
+        <!-- The Modal -->
+        <div id="gallery-modal" class="modal">
+            <span class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></span>
+            <div class="modal-content">
+
+                <button class="modal-nav prev" onclick="changeSlide(-1)"><i
+                        class="fa-solid fa-chevron-left"></i></button>
+                <button class="modal-nav next" onclick="changeSlide(1)"><i
+                        class="fa-solid fa-chevron-right"></i></button>
+
+                <!-- Slide 1 -->
+                <div class="slide">
+                    <img src="../poze/ata1.jpg" alt="Echipa">
+                    <div class="slide-text">Echipa X-Time la lucru. O idee, foarte multă trudă, un țel comun.</div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <img src="../poze/ata2.jpg" alt="Robot">
+                    <div class="slide-text">Robotul nostru pe masa oficială FLL gata să obțină maximul de puncte.</div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <img src="../poze/ata3.jpg" alt="Tema">
+                    <div class="slide-text">Scanare simulată a artefactelor. Cum tehnologia viitorului salvează
+                        trecutul.</div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="slide">
+                    <img src="../poze/ata4.jpg" alt="Misiune">
+                    <div class="slide-text">Abordarea strategică și îmbinarea dintre robotică durificată și estetica
+                        antică.</div>
+                </div>
+
+                <!-- Slide 5 -->
+                <div class="slide">
+                    <img src="../poze/ata5.jpg" alt="Code">
+                    <div class="slide-text">Programare. Linii nesfârșite de cod, teste repetitive și algoritmul P.I.D.
+                        perfect.</div>
+                </div>
+
+                <!-- Slide 6 -->
+                <div class="slide">
+                    <img src="../poze/ata6.jpg" alt="Design">
+                    <div class="slide-text">Construirea șasiului și integrarea modulelor inteligente. Gândire
+                        inginerească.</div>
+                </div>
+
+                <!-- Slide 7 -->
+                <div class="slide">
+                    <img src="../poze/ata7.jpg" alt="Victory">
+                    <div class="slide-text">Momentul victoriei. Emoția și satisfacția de a rezolva provocările FLL!
+                    </div>
+                </div>
+
+                <div class="gallery-indicator"><span id="current-slide-num">1</span> / 7</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SPONSORI & QR -->
+    <!-- SPONSORI & FINAL -->
+    <section class="container reveal text-center" style="position: relative; padding-bottom: 6rem;">
+        <!-- Fundal decorativ glowing -->
+        <div
+            style="position: absolute; top: 40%; left: 50%; width: 800px; height: 600px; background: radial-gradient(ellipse, rgba(212, 175, 55, 0.12) 0%, rgba(59, 130, 246, 0.05) 40%, transparent 70%); transform: translate(-50%, -50%); z-index: 0; pointer-events: none;">
+        </div>
+
+        <div style="position: relative; z-index: 1; max-width: 1000px; margin: 0 auto; padding: 2rem 0;">
+            <!-- Sponsori -->
+            <div class="glass-card text-center"
+                style="border-radius: 40px; border: 1px solid rgba(212, 175, 55, 0.2); box-shadow: 0 25px 50px rgba(0,0,0,0.6), inset 0 0 30px rgba(212,175,55,0.05); padding: 4rem 2rem;">
+                <div
+                    style="font-size: 3.5rem; color: var(--accent-gold); margin-bottom: 1.5rem; text-shadow: 0 0 20px rgba(212,175,55,0.4);">
+                    <i class="fa-solid fa-handshake-angle"></i>
+                </div>
+                <h2
+                    style="font-size: 2.8rem; margin-bottom: 1rem; background: linear-gradient(135deg, white, var(--accent-gold), var(--light-gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Susținuți De</h2>
+                <p
+                    style="color: var(--text-muted); font-size: 1.2rem; margin-bottom: 4rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                    Mulțumim partenerilor extraordinari care au crezut în viziunea noastră de a îmbina educația,
+                    istoria, robotica și inovația.</p>
+
+                <div class="sponsors-grid"
+                    style="justify-content: center; gap: 2.5rem; display: flex; flex-wrap: wrap;">
+                    <div class="sponsor-logo" title="Muzeul Sofia"
+                        style="background: rgba(15, 23, 42, 0.8); padding: 1.5rem 2.5rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); flex: 1; min-width: 250px;">
+                        <i class="fa-solid fa-landmark-dome"
+                            style="color: var(--light-blue); font-size: 2rem; display: block; margin-bottom: 10px; margin-right: 0;"></i>
+                        <span style="font-weight: 500; font-size: 1.1rem; display: block;">Muzeu de etnografie
+                            Sofia</span>
+                    </div>
+                    <div class="sponsor-logo" title="Primaria"
+                        style="background: rgba(15, 23, 42, 0.8); padding: 1.5rem 2.5rem; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); flex: 1; min-width: 250px;">
+                        <i class="fa-solid fa-city"
+                            style="color: var(--light-blue); font-size: 2rem; display: block; margin-bottom: 10px; margin-right: 0;"></i>
+                        <span style="font-weight: 500; font-size: 1.1rem; display: block;">Primăria Sofia</span>
+                    </div>
+                    <div class="sponsor-logo" title="Educație"
+                        style="background: rgba(15, 23, 42, 0.8); padding: 1.5rem 2.5rem; border-radius: 20px; border: 1px solid rgba(212,175,55,0.3); box-shadow: 0 0 15px rgba(212,175,55,0.1); flex: 1; min-width: 250px;">
+                        <i class="fa-solid fa-graduation-cap"
+                            style="color: var(--accent-gold); font-size: 2rem; display: block; margin-bottom: 10px; margin-right: 0;"></i>
+                        <span
+                            style="font-weight: 600; font-size: 1.1rem; display: block; color: var(--accent-gold);">Academia
+                            de Științe a Moldovei</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 6rem; position: relative;">
+                <!-- Mai mult decor in jurul butonului -->
+                <div
+                    style="position: absolute; top: 50%; left: 50%; width: 400px; height: 1px; background: linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent); transform: translate(-50%, -50%); z-index: -1;">
+                </div>
+
+                <a href="../index.html" class="btn btn-gold"
+                    style="font-size: 1.3rem; padding: 1.5rem 4rem; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4); text-transform: uppercase; letter-spacing: 2px; border-radius: 50px; position: relative; z-index: 2;">
+                    <i class="fa-solid fa-house" style="margin-right: 10px;"></i> Mergi Acasă
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Reveal Animations on Scroll
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        window.addEventListener('scroll', reveal);
+        // Trigger once on load
+        reveal();
+
+        // ---------------- GALLERY MODAL SCRIPT ----------------
+        const modal = document.getElementById('gallery-modal');
+        const slides = document.querySelectorAll('.slide');
+        const indicator = document.getElementById('current-slide-num');
+        let currentSlide = 0;
+
+        function openModal() {
+            modal.style.display = 'block';
+            setTimeout(() => modal.classList.add('show'), 10);
+            showSlide(currentSlide);
+            // Removing the line that blocks main scrolling
+        }
+
+        function closeModal() {
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+
+                // reset slide positioning for animation effects
+                slides.forEach(s => s.style.animation = 'none');
+            }, 400);
+        }
+
+        function changeSlide(n) {
+            // Apply different animation direction based on next/prev
+            slides.forEach(s => s.style.animation = 'none');
+            setTimeout(() => {
+                if (n > 0) {
+                    slides[currentSlide].style.animation = 'swipeAnim 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)';
+                } else {
+                    slides[currentSlide].style.animation = 'swipeAnim 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) reverse';
+                }
+            }, 10);
+
+            showSlide(currentSlide += n);
+        }
+
+        function showSlide(n) {
+            if (n >= slides.length) currentSlide = 0;
+            if (n < 0) currentSlide = slides.length - 1;
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            slides[currentSlide].classList.add('active');
+
+            // Update indicator
+            indicator.textContent = currentSlide + 1;
+        }
+
+        // Swipe Functionality for mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        modal.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        });
+
+        modal.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchendX < touchstartX - 50) changeSlide(1); // Swipe left
+            if (touchendX > touchstartX + 50) changeSlide(-1); // Swipe right
+        }
+
+        // Close when clicking outside of the content image
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal || e.target.classList.contains('modal-content')) {
+                closeModal();
+            }
+        });
+
+        // Keyboard navigation Support for Gallery
+        document.addEventListener('keydown', function (event) {
+            if (modal.classList.contains('show')) {
+                if (event.key === "Escape") { closeModal(); }
+                if (event.key === "ArrowRight") { changeSlide(1); }
+                if (event.key === "ArrowLeft") { changeSlide(-1); }
+            }
+            if (problemModal.classList.contains('show')) {
+                if (event.key === "Escape") { closeProblemModal(); }
+            }
+        });
+
+        // ---------------- PROBLEM MODAL SCRIPT ----------------
+        const problemModal = document.getElementById('problem-modal');
+        const problemContents = document.querySelectorAll('.problem-modal-content');
+
+        function openProblemModal(type) {
+            // Hide all contents first
+            problemContents.forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Show the relative content
+            const activeContent = document.getElementById(`problem-content-${type}`);
+            if (activeContent) {
+                activeContent.style.display = 'block';
+            }
+
+            problemModal.style.display = 'block';
+            setTimeout(() => problemModal.classList.add('show'), 10);
+        }
+
+        function closeProblemModal() {
+            problemModal.classList.remove('show');
+            setTimeout(() => {
+                problemModal.style.display = 'none';
+            }, 400);
+        }
+
+        // Close when clicking outside of the content image
+        problemModal.addEventListener('click', (e) => {
+            if (e.target === problemModal || e.target.classList.contains('modal-content')) {
+                closeProblemModal();
+            }
+        });
+
+    </script>
+</body>
+
+</html>
